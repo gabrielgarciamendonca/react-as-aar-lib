@@ -132,3 +132,90 @@ pronto, agora você poderá utilizar os seguintes comandos para gerar seu tão a
 ```
 
 ele estará em: [nome-do-projeto]\android\build\outputs\aar.
+
+
+
+
+# Using .AAR of React Native in a Android Project
+
+Crie seu projeto Android, pelo android studio. E dentro do build.gradle(module) na propriedade `dependencies` inclua a seguinte linha:
+
+```kotlin
+implementation files('[localização-do-seu-aar]/[nome-do-seu-aar].aar')
+```
+
+Feito isso, sincronize o gradle e pronto, sua lib está instalada no projeto Android.
+
+Mas como não é 1000 maravilhas, irá ocorrer alguns erros, para corrigi-los, vá nas dependencias do projeto build.gradle(module) e adicione as seguintes dependencias:
+
+```kotlin
+dependencies {
+		...
+    //noinspection GradleDependency
+    implementation 'androidx.appcompat:appcompat:1.1.0-rc01'
+    //noinspection GradleDependency
+    implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0-alpha02'
+    //noinspection GradleDynamicVersion
+    implementation 'com.facebook.react:react-android:+'
+    //noinspection GradleDynamicVersion
+    implementation 'org.webkit:android-jsc:+'
+    //noinspection GradleDynamicVersion
+    implementation 'com.facebook.react:hermes-android:+'
+    //noinspection GradleDependency,GradleDynamicVersion
+    implementation 'com.facebook.soloader:soloader:0.9.0+'
+}
+```
+
+Crie uma ReactApplication para extender sua MainApplication incluida pela lib, ficará parecido com isso:
+
+```kotlin
+package [package-do-seu-projeto]
+
+class ReactApplication: com.[nome-da-lib].MainApplication() {
+}
+```
+
+Antes de prosseguir, na MainActivity, substitua o código por isso:
+
+```kotlin
+package [package-do-seu-projeto]
+
+class MainActivity : com.[nome-da-lib].MainActivity() {
+
+}
+```
+
+E por hora, eu ainda não descobri como utilizar duas applications no mesmo projeto, então eu deletei a application gerada automaticamente e inclui uma nova application no arquivo Manifest.xml:
+
+```kotlin
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.asgard.munnin"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <application
+        android:name=".ReactApplication"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:allowBackup="false"
+        android:theme="@style/Platform.MaterialComponents.Light"
+        tools:ignore="DataExtractionRules">
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/app_name"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|screenSize|smallestScreenSize|uiMode"
+            android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
+            android:exported="true"
+            tools:ignore="WrongManifestParent">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>
+```
+
+Inicie o projeto e seja feliz 😊!
