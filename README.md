@@ -68,7 +68,7 @@ Agora remova tudo de dentro do com.[nome-do-projeto](debug), seu projeto ficará
 
  
 
-![Capturar.PNG](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/8f0aa16a-f8b9-48d0-bb5e-dc858bd84e98/Capturar.png)
+![Capturar.PNG](https://github.com/gabrielgarciamendonca/react-as-aar-lib/blob/master/example.PNG)
 
 Obs.: Algumas dependencias da MainApplication irá quebrar, corrigindo elas, seu arquivo ficará parecido com esse:
 
